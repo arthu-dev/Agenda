@@ -1,14 +1,25 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+
+import RightSide from './components/RightSide';
+import Header from './components/Header';
+import Screen1 from './components/Screen1';
+import { Grid } from '@material-ui/core';
+
+
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Header />
+        <Grid
+            container
+            direction="row"
+            justify="flex-start"
+            alignItems="center"
+        >
+            <Screen1 />
+            <RightSide />
+        </Grid >
   </React.StrictMode>,
   document.getElementById('root')
 );
-
-
-serviceWorker.unregister();
