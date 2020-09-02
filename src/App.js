@@ -27,11 +27,7 @@ import { ptBR } from "date-fns/locale";
 
 
 function App() {
-    //header
-    
-
-     
-        
+    //header   
     const useStyles = makeStyles((theme) => ({
         root: {
             flexGrow: 1,
@@ -40,8 +36,21 @@ function App() {
             marginRight: theme.spacing(2),
         },
         title: {
-            flexGrow: 1,
+            flexGrow: 2,
         },
+        picker:{
+            
+            borderWidth:3,
+            align:'center',
+            border: "1px solid black",
+            borderRadius: 4,
+            borderColor:'#4f4f4f',
+            margin:2,
+            padding:5,
+            backgroundColor:'white',
+            
+        },
+        
     })
     );
 
@@ -82,12 +91,12 @@ function App() {
             setSelectedDate(moment(info).format('L'));
             calendarApi.changeView('timeGrid', info)
             FullcalendarApi.changeView('dayGridMonth', info)
-              
+            
         }
         //setSelectedDate(date);
-        // O Hook n é tão rápido quanto o parâmetro, dá uns bugs esquisitos por
+        //O Hook n é tão rápido quanto o parâmetro, dá uns bugs esquisitos por
         //ele ñ se atualizar a tempo
-       // console.log("selectDate "+selectedDate)//dá o valor antigo
+        //console.log("selectDate "+selectedDate)//dá o valor antigo
         
         //console.log(date)
         //console.log(moment(selectedDate).format('MM/DD/yyyy'))
@@ -103,13 +112,16 @@ function App() {
                     <Typography variant="h6" className={classes.title}>
                         Agenda
                     </Typography>
+                    
                     <MuiPickersUtilsProvider locale={ptBR} utils={DateFnsUtils}>
                         <KeyboardDatePicker
+                            edge="center"
+                            className={classes.picker}
                             disableToolbar
                             invalidDateMessage="Data em formato inválido."
                             maxDateMessage="Data em formato inválido."
                             minDateMessage="Data em formato inválido."
-                            variant="inline"
+                            variant="dialog"
                             format="dd/MM/yyyy"
                             margin="normal"
                             value={moment(selectedDate).format('L')}
@@ -118,10 +130,13 @@ function App() {
                                 'aria-label': 'change date',
                             }}
                         />
+                    
                     </MuiPickersUtilsProvider>
+                    
                     {auth && (
                         <div>
                             <IconButton
+                                className={classes.icon}
                                 aria-label="account of current user"
                                 aria-controls="menu-appbar"
                                 aria-haspopup="true"

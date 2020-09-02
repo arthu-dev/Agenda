@@ -4,7 +4,6 @@
   "private": true,
   "dependencies": {
     "@date-io/date-fns": "v1",
-    "@date-io/dayjs": "^2.9.0",
     "@fullcalendar/daygrid": "^5.3.0",
     "@fullcalendar/interaction": "^5.3.0",
     "@fullcalendar/react": "^5.3.0",
@@ -16,7 +15,6 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "date-fns": "latest",
-    "dayjs": "^1.8.34",
     "moment": "^2.27.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
