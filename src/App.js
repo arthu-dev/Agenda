@@ -1,30 +1,47 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 
-import { Grid } from '@material-ui/core';
-import FullCalendar from '@fullcalendar/react';
-import timeGridPlugin from '@fullcalendar/timegrid';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import interactionPlugin from "@fullcalendar/interaction";
-import moment from 'moment';
- //momentPlugin from '@fullcalendar/moment';
-//import {toMoment, toMomentDuration } from '@fullcalendar/moment';
+import { Grid } from '@material-ui/core'
+import FullCalendar from '@fullcalendar/react'
+import timeGridPlugin from '@fullcalendar/timegrid'
+import dayGridPlugin from '@fullcalendar/daygrid'
+import interactionPlugin from "@fullcalendar/interaction"
+import moment from 'moment'
+//momentPlugin from '@fullcalendar/moment'
+//import {toMoment, toMomentDuration } from '@fullcalendar/moment'
 
 
 //header
-import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
-import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
-import DateFnsUtils from "@date-io/date-fns";
-import { ptBR } from "date-fns/locale";
+import { makeStyles } from '@material-ui/core/styles'
+import AppBar from '@material-ui/core/AppBar'
+import Toolbar from '@material-ui/core/Toolbar'
+import Typography from '@material-ui/core/Typography'
+import IconButton from '@material-ui/core/IconButton'
+import MenuIcon from '@material-ui/icons/Menu'
+import AccountCircle from '@material-ui/icons/AccountCircle'
+import MenuItem from '@material-ui/core/MenuItem'
+import Menu from '@material-ui/core/Menu'
+import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers'
+import DateFnsUtils from "@date-io/date-fns"
+import { ptBR } from "date-fns/locale"
 
 
+var today = new Date()
+var month, dayM
+if (Number(today.getUTCDate()) < 10) {
+    dayM = `0${today.getUTCDate()}`
+} else {
+    dayM = today.getUTCDate()
+}
+if (Number(today.getUTCMonth()) < 10) {
+    month = `0${Number(today.getUTCMonth()) + 1}`
+} else {
+    month = Number(today.getUTCMonth()) + 1
+}
+var year = today.getUTCFullYear()
+console.log(year)
+
+const calendarRef = React.createRef()
+const fullCalendarRef = React.createRef()
 
 function App() {
     //header   
@@ -38,68 +55,50 @@ function App() {
         title: {
             flexGrow: 2,
         },
-        picker:{
-            
-            borderWidth:3,
-            align:'center',
+        picker: {
+
+            borderWidth: 3,
+            align: 'center',
             border: "1px solid black",
             borderRadius: 4,
-            borderColor:'#4f4f4f',
-            margin:2,
-            padding:5,
-            backgroundColor:'white',
-            
+            borderColor: '#4f4f4f',
+            margin: 2,
+            padding: 5,
+            backgroundColor: 'white',
+
         },
-        
+
     })
-    );
-
-    const classes = useStyles();
-    const [auth] = useState(true);
-    const [anchorEl, setAnchorEl] = useState(null);
-    const open = Boolean(anchorEl);
-
-
+    )
+    const classes = useStyles()
+    const [auth] = useState(true)
+    const [anchorEl, setAnchorEl] = useState(null)
+    const open = Boolean(anchorEl)
     const handleMenu = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
+        setAnchorEl(event.currentTarget)
+    }
 
     const handleClose = () => {
-        setAnchorEl(null);
-    };
-    
+        setAnchorEl(null)
+    }
+
     //body 
+    const [selectedDate, setSelectedDate] = useState()
     
-    const [selectedDate, setSelectedDate] = useState();
-    var today = new Date();
-    var dayM = today.getUTCDate();
-    var year = today.getUTCFullYear();
-    var month = Number(today.getUTCMonth())+1;
-    const calendarRef = React.createRef();
-    const FullcalendarRef = React.createRef();
+    const renderCalendars =(info)=>{
+            calendarRef.current.getApi().changeView('timeGrid', info)
+            fullCalendarRef.current.getApi().changeView('dayGridMonth', info)
+            setSelectedDate(moment(info).format('L'))
+    }
+
+    const handleDatePick = (info) => {
+        if (info && isNaN(Number(moment(info).format('L')))) {
+            renderCalendars(info)
+        }
+    }
 
     const handleDateClick = (info) => {
-        let calendarApi = calendarRef.current.getApi()
-        let FullcalendarApi = FullcalendarRef.current.getApi()
-       
-        if(info.dateStr&& Number(moment(info.dateStr).format('M'))){
-            calendarApi.changeView('timeGrid', info.dateStr)
-            setSelectedDate(moment(info.dateStr).format('L'));
-           
-        }
-        if(info && !info.dateStr && Number(moment(info).format('M'))){
-            setSelectedDate(moment(info).format('L'));
-            calendarApi.changeView('timeGrid', info)
-            FullcalendarApi.changeView('dayGridMonth', info)
-            
-        }
-        //setSelectedDate(date);
-        //O Hook n é tão rápido quanto o parâmetro, dá uns bugs esquisitos por
-        //ele ñ se atualizar a tempo
-        //console.log("selectDate "+selectedDate)//dá o valor antigo
-        
-        //console.log(date)
-        //console.log(moment(selectedDate).format('MM/DD/yyyy'))
+        renderCalendars(info.dateStr)
     }
     //tutorial de programação procedural aki em baixo
     return (
@@ -112,7 +111,7 @@ function App() {
                     <Typography variant="h6" className={classes.title}>
                         Agenda
                     </Typography>
-                    
+
                     <MuiPickersUtilsProvider locale={ptBR} utils={DateFnsUtils}>
                         <KeyboardDatePicker
                             edge="center"
@@ -124,15 +123,14 @@ function App() {
                             variant="dialog"
                             format="dd/MM/yyyy"
                             margin="normal"
-                            value={moment(selectedDate).format('L')}
-                            onChange={handleDateClick}
+                            value={selectedDate}
+                            onChange={handleDatePick}
                             KeyboardButtonProps={{
                                 'aria-label': 'change date',
                             }}
                         />
-                    
                     </MuiPickersUtilsProvider>
-                    
+
                     {auth && (
                         <div>
                             <IconButton
@@ -167,15 +165,11 @@ function App() {
                     )}
                 </Toolbar>
             </AppBar>
-            <Grid
-                container
-                direction="row"
-                justify="flex-start"
-                alignItems="flex-start"
-            >
+            <Grid container direction="row" justify="flex-start" alignItems="flex-start">
                 <div style={{ width: "65%", marginTop: "3%" }}>
-                    <FullCalendar
-                        ref={FullcalendarRef}
+
+                    <FullCalendar //Mês
+                        ref={fullCalendarRef}
                         locale='pt-br'
                         buttonText={{ today: 'Mês atual' }}
                         headerToolbar={
@@ -185,14 +179,15 @@ function App() {
                                 right: ''
                             }
                         }
-                        plugins={[dayGridPlugin,/*momentPlugin,*/ interactionPlugin]}
+                        plugins={[dayGridPlugin, interactionPlugin]}
                         initialView="dayGridMonth"
                         dateClick={handleDateClick}
                         timeZone='UTC'
-                    />;
+                    />
                 </div>
                 <div style={{ width: "35%", marginTop: "3%" }} >
-                    <FullCalendar
+
+                    <FullCalendar //Tempo 
                         ref={calendarRef}
                         height={750}
                         timeZone='UTC'
@@ -206,42 +201,25 @@ function App() {
                         }}
                         eventColor='#3f51b5'
                         locale={'pt-br'}
-                        plugins={[timeGridPlugin,/*momentPlugin,*/interactionPlugin]}
-                        weekends={false}
+                        plugins={[timeGridPlugin, interactionPlugin]}
+                        weekends={true}
                         initialView="timeGrid"
-                        firstDay={`${year}-0${month + 1}-${dayM + 1}`}
                         dayCount={1}
                         editable={true}
+                        hiddenDays={[]}
                         droppable={true}
                         events={
                             [
                                 {
                                     "title": "Exemplo ",
-                                    "start": `${year}-0${month + 1}-${dayM}T09:00:00`,
-                                    "end": `${year}-0${month + 1}-${dayM}T11:00:00`
+                                    "start": `${year}-${month}-${dayM}T09:00:00`,
+                                    "end": `${year}-${month}-${dayM}T11:00:00`
                                 },
                                 {
                                     "title": "Exemplo ",
-                                    "start": `${year}-0${month + 1}-${dayM}`,
-                                    "end": `${year}-0${month + 1}-${dayM}`
+                                    "start": `${year}-${month}-${dayM}`,
+                                    "end": `${year}-${month}-${dayM}`
                                 },
-                                {
-                                    "title": "Exemplo ",
-                                    "start": `${year}-0${month + 1}-${dayM + 1}T11:00:00`,
-                                    "end": `${year}-0${month + 1}-${dayM + 1}T13:00:00`
-                                },
-                                {
-                                    "title": "Exemplo ",
-                                    "start": `${year}-0${month + 1}-${dayM - 1}T10:00:00`,
-                                    "end": `${year}-0${month + 1}-${dayM - 1}T13:00:00`
-                                },
-                                {
-                                    "title": "Exemplo ",
-                                    "start": `${year}-0${month + 1}-${dayM - 1}T11:00:00`,
-                                    "end": `${year}-0${month + 1}-${dayM - 1}T13:00:00`
-                                }
-
-
                             ]
                         }
                     />
@@ -251,4 +229,4 @@ function App() {
     )
 }
 
-export default App;
+export default App
