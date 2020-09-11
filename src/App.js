@@ -85,20 +85,20 @@ function App() {
     //body 
     const [selectedDate, setSelectedDate] = useState()
     
-    const renderCalendars =(info)=>{
-            calendarRef.current.getApi().changeView('timeGrid', info)
-            fullCalendarRef.current.getApi().changeView('dayGridMonth', info)
-            setSelectedDate(moment(info).format('L'))
+    const renderCalendars =(date)=>{
+            calendarRef.current.getApi().changeView('timeGrid', date)
+            fullCalendarRef.current.getApi().changeView('dayGridMonth', date)
+            setSelectedDate(moment(date).format('L'))
     }
 
-    const handleDatePick = (info) => {
-        if (info && isNaN(Number(moment(info).format('L')))) {
-            renderCalendars(info)
+    const handleDatePick = (date) => {
+        if (date && isNaN(Number(moment(date).format('L')))) {
+            renderCalendars(date)
         }
     }
 
-    const handleDateClick = (info) => {
-        renderCalendars(info.dateStr)
+    const handleDateClick = (date) => {
+        renderCalendars(date.dateStr)
     }
     //tutorial de programação procedural aki em baixo
     return (
@@ -120,7 +120,6 @@ function App() {
                             invalidDateMessage="Data em formato inválido."
                             maxDateMessage="Data em formato inválido."
                             minDateMessage="Data em formato inválido."
-                            variant="dialog"
                             format="dd/MM/yyyy"
                             margin="normal"
                             value={selectedDate}
@@ -158,8 +157,8 @@ function App() {
                                 open={open}
                                 onClose={handleClose}
                             >
-                                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                                <MenuItem onClick={handleClose}>My account</MenuItem>
+                                <MenuItem onClick={handleClose}>Minha conta</MenuItem>
+                                <MenuItem onClick={handleClose}>Sair</MenuItem>
                             </Menu>
                         </div>
                     )}
@@ -171,7 +170,6 @@ function App() {
                     <FullCalendar //Mês
                         ref={fullCalendarRef}
                         locale='pt-br'
-                        buttonText={{ today: 'Mês atual' }}
                         headerToolbar={
                             {
                                 left: '',
@@ -182,18 +180,16 @@ function App() {
                         plugins={[dayGridPlugin, interactionPlugin]}
                         initialView="dayGridMonth"
                         dateClick={handleDateClick}
-                        timeZone='UTC'
                     />
                 </div>
                 <div style={{ width: "35%", marginTop: "3%" }} >
 
                     <FullCalendar //Tempo 
                         ref={calendarRef}
-                        height={750}
-                        timeZone='UTC'
+                        height={790}
                         slotLabelInterval={'00:30'}
-                        slotMaxTime={'18:30'}
-                        slotMinTime={'06:30'}
+                        slotMinTime={'06:00'}
+                        slotMaxTime={'19:30'}
                         headerToolbar={{
                             left: '',
                             center: '',
@@ -206,7 +202,6 @@ function App() {
                         initialView="timeGrid"
                         dayCount={1}
                         editable={true}
-                        hiddenDays={[]}
                         droppable={true}
                         events={
                             [
