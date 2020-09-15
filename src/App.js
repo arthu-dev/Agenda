@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+//import io from 'socket.io-client'
 
 import { Grid } from '@material-ui/core'
 import FullCalendar from '@fullcalendar/react'
@@ -6,8 +7,7 @@ import timeGridPlugin from '@fullcalendar/timegrid'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from "@fullcalendar/interaction"
 import moment from 'moment'
-//momentPlugin from '@fullcalendar/moment'
-//import {toMoment, toMomentDuration } from '@fullcalendar/moment'
+
 
 
 //header
@@ -38,12 +38,13 @@ if (Number(today.getUTCMonth()) < 10) {
     month = Number(today.getUTCMonth()) + 1
 }
 var year = today.getUTCFullYear()
-console.log(year)
+
 
 const calendarRef = React.createRef()
 const fullCalendarRef = React.createRef()
 
 function App() {
+    //var socket = io();
     //header   
     const useStyles = makeStyles((theme) => ({
         root: {
@@ -180,13 +181,62 @@ function App() {
                         plugins={[dayGridPlugin, interactionPlugin]}
                         initialView="dayGridMonth"
                         dateClick={handleDateClick}
+                        dayMaxEventRows= {true}
+                        eventColor='#3f51b5'
+                        events={
+                            [
+                                {
+                                    "title": "Exemplo ",
+                                    "start": `${year}-${month}-${dayM}T09:00:00`,
+                                    "end": `${year}-${month}-${dayM}T11:00:00`
+                                },
+                                {
+                                    "title": "Exemplo ",
+                                    "start": `${year}-${month}-${dayM-5}T09:00:00`,
+                                    "end": `${year}-${month}-${dayM-4}T11:00:00`
+                                },
+
+                                {
+                                    "title": "Exemplo ",
+                                    "start": `${year}-${month}-${dayM}T09:00:00`,
+                                    "end": `${year}-${month}-${dayM}T11:00:00`
+                                }, 
+                                {
+                                    "title": "Exemplo ",
+                                    "start": `${year}-${month}-${dayM}T09:00:00`,
+                                    "end": `${year}-${month}-${dayM}T11:00:00`
+                                },
+                                {
+                                    "title": "Exemplo ",
+                                    "start": `${year}-${month}-${dayM}T09:00:00`,
+                                    "end": `${year}-${month}-${dayM}T11:00:00`
+                                },
+                                {
+                                    "title": "Exemplo ",
+                                    "start": `${year}-${month}-${dayM}T09:00:00`,
+                                    "end": `${year}-${month}-${dayM}T11:00:00`
+                                },
+                                {
+                                    "title": "Exemplo ",
+                                    "start": `${year}-${month}-${dayM}T09:00:00`,
+                                    "end": `${year}-${month}-${dayM}T11:00:00`
+                                },
+                                {
+                                    "title": "Exemplo ",
+                                    "start": `${year}-${month}-${dayM}`,
+                                    "end": `${year}-${month}-${dayM}`
+                                },
+                            ]
+                            
+                        }
                     />
                 </div>
                 <div style={{ width: "35%", marginTop: "3%" }} >
 
                     <FullCalendar //Tempo 
                         ref={calendarRef}
-                        height={790}
+                        nowIndicator={true}
+                        height={788}
                         slotLabelInterval={'00:30'}
                         slotMinTime={'06:00'}
                         slotMaxTime={'19:30'}
@@ -206,6 +256,12 @@ function App() {
                         events={
                             [
                                 {
+                                    "title": "Exemplo com cor diferente ",
+                                    "color":"#333333",
+                                    "start": `${year}-${month}-${dayM}T12:00:00`,
+                                    "end": `${year}-${month}-${dayM}T14:00:00`
+                                },
+                                {
                                     "title": "Exemplo ",
                                     "start": `${year}-${month}-${dayM}T09:00:00`,
                                     "end": `${year}-${month}-${dayM}T11:00:00`
@@ -216,6 +272,7 @@ function App() {
                                     "end": `${year}-${month}-${dayM}`
                                 },
                             ]
+                            
                         }
                     />
                 </div>
