@@ -6,32 +6,40 @@
                                 },
                                 {
                                     "title": "Exemplo ",
+                                    "start": `${year}-${month}-${dayM-5}T09:00:00`,
+                                    "end": `${year}-${month}-${dayM-4}T11:00:00`
+                                },
+
+                                {
+                                    "title": "Exemplo ",
+                                    "start": `${year}-${month}-${dayM}T09:00:00`,
+                                    "end": `${year}-${month}-${dayM}T11:00:00`
+                                }, 
+                                {
+                                    "title": "Exemplo ",
+                                    "start": `${year}-${month}-${dayM}T09:00:00`,
+                                    "end": `${year}-${month}-${dayM}T11:00:00`
+                                },
+                                {
+                                    "title": "Exemplo ",
+                                    "start": `${year}-${month}-${dayM}T09:00:00`,
+                                    "end": `${year}-${month}-${dayM}T11:00:00`
+                                },
+                                {
+                                    "title": "Exemplo ",
+                                    "start": `${year}-${month}-${dayM}T09:00:00`,
+                                    "end": `${year}-${month}-${dayM}T11:00:00`
+                                },
+                                {
+                                    "title": "Exemplo ",
+                                    "start": `${year}-${month}-${dayM}T09:00:00`,
+                                    "end": `${year}-${month}-${dayM}T11:00:00`
+                                },
+                                {
+                                    "title": "Exemplo ",
                                     "start": `${year}-${month}-${dayM}`,
                                     "end": `${year}-${month}-${dayM}`
                                 },
                             ]
 
- socket.on('event',(evt)=>{
-                              
-                                  return evt;
-                               
-                              })
-
-var app = require('express')();
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
-var port = process.env.PORT || 3000;
-
-//app.get('/', function(req, res){
-//  res.sendFile(__dirname + '/index.html');
-//});
-
-io.on('connection', function(socket){
-  socket.on('event', function(evt){
-    io.emit('event', evt);
-  });
-});
-
-http.listen(port, function(){
-  console.log('listening on *:' + port);
-});
+ 

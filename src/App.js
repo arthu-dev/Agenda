@@ -1,5 +1,4 @@
-import React, { useState } from 'react'
-//import io from 'socket.io-client'
+import React, { useState, useEffect} from 'react'
 
 import { Grid } from '@material-ui/core'
 import FullCalendar from '@fullcalendar/react'
@@ -24,7 +23,8 @@ import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/picker
 import DateFnsUtils from "@date-io/date-fns"
 import { ptBR } from "date-fns/locale"
 
-
+const io = require('socket.io-client');
+const socket = io('http://localhost:3001');
 var today = new Date()
 var month, dayM
 if (Number(today.getUTCDate()) < 10) {
@@ -44,7 +44,7 @@ const calendarRef = React.createRef()
 const fullCalendarRef = React.createRef()
 
 function App() {
-    //var socket = io();
+    
     //header   
     const useStyles = makeStyles((theme) => ({
         root: {
@@ -85,13 +85,28 @@ function App() {
 
     //body 
     const [selectedDate, setSelectedDate] = useState()
+    const [eventos, setEventos] = useState()
+    
+  
+        useEffect(() => {
+            socket.on('eventos', data => {
+                console.log(data)
+                setEventos(data)
+            })
+          }, [])
+          useEffect(() => {
+            socket.on('novu eventu', teste=>
+            console.log(teste)
+            
+            )
+        }, [])
+          
     
     const renderCalendars =(date)=>{
             calendarRef.current.getApi().changeView('timeGrid', date)
             fullCalendarRef.current.getApi().changeView('dayGridMonth', date)
             setSelectedDate(moment(date).format('L'))
     }
-
     const handleDatePick = (date) => {
         if (date && isNaN(Number(moment(date).format('L')))) {
             renderCalendars(date)
@@ -183,52 +198,7 @@ function App() {
                         dateClick={handleDateClick}
                         dayMaxEventRows= {true}
                         eventColor='#3f51b5'
-                        events={
-                            [
-                                {
-                                    "title": "Exemplo ",
-                                    "start": `${year}-${month}-${dayM}T09:00:00`,
-                                    "end": `${year}-${month}-${dayM}T11:00:00`
-                                },
-                                {
-                                    "title": "Exemplo ",
-                                    "start": `${year}-${month}-${dayM-5}T09:00:00`,
-                                    "end": `${year}-${month}-${dayM-4}T11:00:00`
-                                },
-
-                                {
-                                    "title": "Exemplo ",
-                                    "start": `${year}-${month}-${dayM}T09:00:00`,
-                                    "end": `${year}-${month}-${dayM}T11:00:00`
-                                }, 
-                                {
-                                    "title": "Exemplo ",
-                                    "start": `${year}-${month}-${dayM}T09:00:00`,
-                                    "end": `${year}-${month}-${dayM}T11:00:00`
-                                },
-                                {
-                                    "title": "Exemplo ",
-                                    "start": `${year}-${month}-${dayM}T09:00:00`,
-                                    "end": `${year}-${month}-${dayM}T11:00:00`
-                                },
-                                {
-                                    "title": "Exemplo ",
-                                    "start": `${year}-${month}-${dayM}T09:00:00`,
-                                    "end": `${year}-${month}-${dayM}T11:00:00`
-                                },
-                                {
-                                    "title": "Exemplo ",
-                                    "start": `${year}-${month}-${dayM}T09:00:00`,
-                                    "end": `${year}-${month}-${dayM}T11:00:00`
-                                },
-                                {
-                                    "title": "Exemplo ",
-                                    "start": `${year}-${month}-${dayM}`,
-                                    "end": `${year}-${month}-${dayM}`
-                                },
-                            ]
-                            
-                        }
+                        events={eventos}
                     />
                 </div>
                 <div style={{ width: "35%", marginTop: "3%" }} >
@@ -251,29 +221,9 @@ function App() {
                         weekends={true}
                         initialView="timeGrid"
                         dayCount={1}
-                        editable={true}
-                        droppable={true}
-                        events={
-                            [
-                                {
-                                    "title": "Exemplo com cor diferente ",
-                                    "color":"#333333",
-                                    "start": `${year}-${month}-${dayM}T12:00:00`,
-                                    "end": `${year}-${month}-${dayM}T14:00:00`
-                                },
-                                {
-                                    "title": "Exemplo ",
-                                    "start": `${year}-${month}-${dayM}T09:00:00`,
-                                    "end": `${year}-${month}-${dayM}T11:00:00`
-                                },
-                                {
-                                    "title": "Exemplo ",
-                                    "start": `${year}-${month}-${dayM}`,
-                                    "end": `${year}-${month}-${dayM}`
-                                },
-                            ]
-                            
-                        }
+                        editable={false}
+                        droppable={false}
+                        events={eventos}
                     />
                 </div>
             </Grid >
