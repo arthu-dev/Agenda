@@ -2,7 +2,7 @@
 
 # dependencies
 /node_modules
-/AgendaServer/node_modules
+/Server/node_modules
 /consoleNode/node_modules
 /.pnp
 .pnp.js

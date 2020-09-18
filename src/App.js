@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 
 import { Grid } from '@material-ui/core'
 import FullCalendar from '@fullcalendar/react'
@@ -23,28 +23,35 @@ import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/picker
 import DateFnsUtils from "@date-io/date-fns"
 import { ptBR } from "date-fns/locale"
 
+
+
 const io = require('socket.io-client');
 const socket = io('http://localhost:3001');
-var today = new Date()
-var month, dayM
-if (Number(today.getUTCDate()) < 10) {
-    dayM = `0${today.getUTCDate()}`
-} else {
-    dayM = today.getUTCDate()
-}
-if (Number(today.getUTCMonth()) < 10) {
-    month = `0${Number(today.getUTCMonth()) + 1}`
-} else {
-    month = Number(today.getUTCMonth()) + 1
-}
-var year = today.getUTCFullYear()
 
 
 const calendarRef = React.createRef()
 const fullCalendarRef = React.createRef()
 
 function App() {
-    
+
+    const [eventos, setEventos] = useState()
+    useEffect(() => {
+        socket.on('eventos', data => {
+            console.log(data)
+            setEventos(data)
+        })
+    }, [])
+    useEffect(() => {
+        socket.on('reenviado', data =>{
+            console.log(data)
+            setEventos(JSON.parse(data))}
+            )
+
+            
+        }, [])//only re-run the effect if new message comes in
+   
+
+
     //header   
     const useStyles = makeStyles((theme) => ({
         root: {
@@ -85,27 +92,15 @@ function App() {
 
     //body 
     const [selectedDate, setSelectedDate] = useState()
-    const [eventos, setEventos] = useState()
-    
-  
-        useEffect(() => {
-            socket.on('eventos', data => {
-                console.log(data)
-                setEventos(data)
-            })
-          }, [])
-          useEffect(() => {
-            socket.on('novu eventu', teste=>
-            console.log(teste)
-            
-            )
-        }, [])
-          
-    
-    const renderCalendars =(date)=>{
-            calendarRef.current.getApi().changeView('timeGrid', date)
-            fullCalendarRef.current.getApi().changeView('dayGridMonth', date)
-            setSelectedDate(moment(date).format('L'))
+
+
+
+
+    const renderCalendars = (date) => {
+        calendarRef.current.getApi().changeView('timeGrid', date)
+        fullCalendarRef.current.getApi().changeView('dayGridMonth', date)
+        setSelectedDate(moment(date).format('L'))
+        
     }
     const handleDatePick = (date) => {
         if (date && isNaN(Number(moment(date).format('L')))) {
@@ -196,7 +191,7 @@ function App() {
                         plugins={[dayGridPlugin, interactionPlugin]}
                         initialView="dayGridMonth"
                         dateClick={handleDateClick}
-                        dayMaxEventRows= {true}
+                        dayMaxEventRows={true}
                         eventColor='#3f51b5'
                         events={eventos}
                     />

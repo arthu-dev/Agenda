@@ -28,23 +28,24 @@ app.get('/', (req, res) => res.json({ hello: 'world!' })); // apenas para verifi
 
 const server = http.createServer(app); // a biblioteca http entra exatamente aqui
 const io = socketio(server); // associando a instância do socketio com o seu servidor
-
+var aa;
 io.on('connect', function (socket) {
   console.log("entrou")
   // irá notificar apenas o usuário
-  var aa;
+  
   socket.on('novo evento', teste=>{
   if(teste){  
   aa=JSON.stringify(teste)
   console.log("chegou "+aa)}
-  socket.emit('novu eventu',aa)
+  io.emit('reenviado',aa)
 }
   )
   
   
   
-  socket.emit('eventos', store)
+  //socket.emit('eventos', store)
 })
+
 
 const port = process.env.PORT || 3001;
 server.listen(port, () => console.log(`[x] Magic happens on port: ${port}`));
